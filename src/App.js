@@ -1,9 +1,20 @@
 import React from 'react';
-
-import './App.css';
+import AddProduct from './components/AddProduct';
+import ShowProduct from './components/ShowProducts';
 
 function App() {
-  return <div className="App"></div>;
+  return (
+    <div className="container">
+      <div className="columns">
+        <div className="column">
+          <AddProduct />
+        </div>
+        <div className="column">
+          <ShowProduct />
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default App;
