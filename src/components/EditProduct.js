@@ -1,14 +1,47 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  getProducts,
+  productsSelectors,
+  updateProduct,
+} from '../features/productSlice';
+import { useParams, useNavigate } from 'react-router';
 
 const EditProduct = () => {
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  const product = useSelector((state) =>
+    productsSelectors.selectById(state, id)
+  );
+
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (product) {
+      setTitle(product.title);
+      setPrice(product.price);
+    }
+  }, [dispatch]);
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    if (title != '' && price !== '') {
+      await dispatch(updateProduct({ id, title, price }));
+      navigate('/');
+    } else {
+      alert('Please fill all fields!');
+    }
+  };
 
   return (
     <div>
-      <form className="box mt-5">
+      <form onSubmit={handleUpdate} className="box mt-5">
         <div className="field">
           <label className="label">Title</label>
           <div className="control">
